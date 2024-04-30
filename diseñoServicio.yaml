@@ -1,0 +1,313 @@
+---
+openapi: 3.1.0
+info:
+  title: Libro Recetas
+  description: |
+    API de nuestro libro de recetas
+  version: 1.0.0
+tags:
+  - name: Recetas
+paths:
+  /recetas:
+    get:
+      summary: Obtener todas las recetas
+      description: Obtener todas las recetas
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recetas"
+    post:
+      summary: Crear una nueva receta
+      description: Crear una nueva receta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/receta_post"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/receta"
+  "/recetas/{id}":
+    parameters:
+    - $ref: "#/components/parameters/id"
+    get:
+      summary: Obtener información específica de una receta
+      description: Obtener información específica de una receta
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/receta"
+        "404":
+          description: Incorrect id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    put:
+      summary: Modificar información específica de una receta
+      description: Modificar información específica de una receta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/receta_put"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/receta"
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      summary: Eliminar una receta
+      description: Eliminar una receta
+      responses:
+        "204":
+          description: Receta eliminada
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  "/recetas/{id}/instrucciones":
+    parameters:
+    - $ref: "#/components/parameters/id"
+    get:
+      summary: Obtener las instrucciones de una receta concreta
+      description: Obtener las instrucciones
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/receta"
+    post:
+      summary: Añadir instrucciones a una receta
+      description: Añadir instrucciones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/receta_put"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/receta"
+  "/recetas/{id}/resenas":
+    parameters:
+    - $ref: "#/components/parameters/id"
+    get:
+      summary: Obtener todas las reseñas de una receta concreta
+      description: Obtener todas las reseñas
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resenas"
+    post:
+      summary: Crear una nueva reseñas
+      description: Crear una nueva reseñas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/resena_post"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resena"
+components:
+  parameters:
+    id: 
+      description: ID
+      name: id
+      required: true
+      in: path
+      schema:
+        $ref: "#/components/schemas/id"
+  schemas:
+    id:
+      type: string
+      examples:
+      - example1: ASDFasdfqwef324
+    recetas:
+      type: array
+      maxItems: 15
+      items:
+        $ref: "#/components/schemas/receta"
+      examples:
+      - example1:
+        - nombre: Creamy Cheese Mushroom Bruschetta Recipe
+          origen: Italian
+          dieta: Vegetarian
+          tiempo: 15 
+          id: ASDFasdfqwef324
+    ingrediente:
+      type: object
+      properties:
+        nombre:
+          type: string
+    receta_put:
+      type: object
+      properties:
+        nombre:
+          type: string
+        origen:
+          type: string
+        dieta:
+          type: string
+        tiempo:
+          description: Los minutos que se tarda en hacer la receta.
+          type: integer
+          minimun: 0
+        link_instrucciones:
+          type: string
+          format: uri
+          examples:
+          - example1: /api/v1/recetas/sadfqwef123/instrucciones
+        link_resenas:
+          type: string
+          format: uri
+          examples:
+          - example1: /api/v1/recetas/sadfqwef123/resenas
+        id:
+          $ref: "#/components/schemas/id"
+      additionalProperties: false
+      examples:
+      - example1:
+        nombre: Creamy Cheese Mushroom Bruschetta Recipe
+        origen: Italian
+        dieta: Vegetarian
+        tiempo: 15 
+        link_resenas: /api/v1/recetas/sadfqwef123/resenas
+        id: ASDFasdfqwef324
+    receta_post:
+      required:
+        - nombre
+      $ref: "#/components/schemas/receta_put"
+    receta:
+      required:
+        - nombre
+        - id
+      $ref: "#/components/schemas/receta_put"
+    error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+      examples:
+      - example1:
+        code: 123
+        message: Incorrect id
+    instrucciones:
+      type: array
+      items:
+        $ref: "#/components/schemas/instruccion"
+    instruccion_put:
+      type: object
+      properties:
+        ingredientes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ingrediente"
+        preparacion:
+          type: string
+        id:
+          $ref: "#/components/schemas/id"
+      additionalProperties: false
+      examples:
+      - example1:
+        ingredientes:
+          - nombre: Baguette
+          - nombre: Garlic
+          - nombre: Button mushrooms
+          - nombre: Extra Virgin Olive Oil
+          - nombre: Salt
+          - nombre: Black pepper powder
+          - nombre: Basil leaves
+        preparacion: Heat oil in a pan. Add garlic and the mushrooms and saute until the mushrooms are wilted and cooked. 
+                        Once all the water from the mushrooms has evaporated stir in the salt and black pepper and add the basil leaves. 
+                        Add in the bechamel sauce and stir well to combine. Turn off the heat and keep aside. 
+                        Arrange the toasted baguette in a serving platter and top about a tablespoon of the mushroom sauce on each cracker. 
+                        Garnish with some fresh basil leaves and serve.
+        id: ASDFasdfqwef324
+    instruccion_post:
+      required:
+        - ingredientes
+        - preparacion
+      $ref: "#/components/schemas/instruccion_put"
+    instruccion:
+      required:
+        - ingredientes
+        - preparacion
+        - id
+      $ref: "#/components/schemas/instruccion_put"
+    resenas:
+      type: array
+      items:
+        $ref: "#/components/schemas/resena"
+    resena_put:
+      type: object
+      properties:
+        opinion:
+          type: string
+        puntuacion:
+          type: integer
+          minimun: 0
+          maximum: 5  
+        id:
+          $ref: "#/components/schemas/id"
+      additionalProperties: false
+      examples:
+      - example1:
+        opinion: Muy buena receta
+        puntuacion: 5
+        id: ASDFasdfqwef325
+    resena_post:
+      required:
+        - opinion
+        - puntuacion
+      $ref: "#/components/schemas/resena_put"
+    resena:
+      required:
+        - opinion
+        - puntuacion
+        - id
+      $ref: "#/components/schemas/resena_put"
+servers:
+  - url: /api/v1
