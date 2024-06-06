@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { ObjectId } = require('mongodb');
 const dbo = require('../db/conn');
-const MAX_RESULTS = parseInt(process.env.MAX_RESULTS);
+const MAX_RESULTS = 20;
 
 // Obtener todos los usuarios
 router.get('/', async (req, res) => {
@@ -29,8 +29,9 @@ router.get('/', async (req, res) => {
             .find(query)
             .limit(limit)
             .toArray();
-
-        res.status(200).json({ results: usuarios, next });
+        
+        res.render('usuarios', {usuarios: usuarios})
+        //res.status(200).json({ results: usuarios, next });
     } catch (err) {
         res.status(400).send('Error al buscar usuarios');
     }
@@ -56,7 +57,8 @@ router.get('/:id/recetas', async (req, res) => {
             return res.status(404).send('No se encontraron recetas para este usuario');
         }
 
-        res.status(200).json(recetas);
+        res.render('recetasPorUsuario', { recetas: recetas, usuarioId: id });
+        //res.status(200).json(recetas);
     } catch (err) {
         res.status(400).send('Error al buscar las recetas');
     }

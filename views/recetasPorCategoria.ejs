@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetas por Categoría</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .recipe-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .recipe-item {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .recipe-item h2, .recipe-item p {
+            margin: 0;
+            padding: 0;
+        }
+        .recipe-item a {
+            display: block;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .recipe-item a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recetas por Categoría</h1>
+        <ul class="recipe-list">
+            <% recetas.forEach(receta => { %>
+                <li class="recipe-item">
+                    <h2>Receta: <%= receta.Name %></h2>
+                    <p>Categoría: <%= receta.Category %></p>
+                    <a href="/api/v1/recetas/<%= receta._id %>">Ver Receta</a>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

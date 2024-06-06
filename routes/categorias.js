@@ -25,7 +25,8 @@ router.get('/', async (req, res) => {
             .find(query)
             .toArray();
 
-        res.status(200).json({ results: categorias, next });
+        res.render('categorias', {categorias: categorias})
+        //res.status(200).json({ results: categorias, next });
     } catch (err) {
         res.status(400).send('Error al buscar categorias');
     }
@@ -52,7 +53,8 @@ router.get('/:category/recetas', async (req, res) => {
             return res.status(404).send('No se encontraron recetas para esta categoría');
         }
 
-        res.status(200).json(recipes);
+        res.render('recetasPorCategoria', { recetas: recipes, categoria: category });
+        //res.status(200).json(recipes);
     } catch (err) {
         res.status(400).send('Error al buscar las recetas');
     }

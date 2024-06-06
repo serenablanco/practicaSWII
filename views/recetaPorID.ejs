@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Receta</title>
+    <link rel="stylesheet" href="/public/stylesheets/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .recipe-detail {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .recipe-detail h1 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .recipe-detail p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .btn-edit {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-reviews {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-reviews:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="recipe-detail">
+            <h1>Receta: <%= receta.Name %></h1>
+            <p><strong>ID:</strong> <%= receta._id %></p>
+            <p><strong>Nombre:</strong> <%= receta.Name %></p>
+            <p><strong>Usuario:</strong> <%= receta.user %></p>
+            <p><strong>Categoría:</strong> <%= receta.Category || 'N/A' %></p>
+            <p><strong>Ingredientes:</strong> <%= receta.Ingredients || 'N/A' %></p>
+            <p><strong>Preparación:</strong> <%= receta.Instructions || 'N/A' %></p>
+            <p><strong>Rating:</strong> <%= receta.Rating || 'N/A' %></p>
+            <!-- Agrega más campos según sea necesario -->
+            <div class="buttons">
+                <div class="btn-container">
+                    <form action="/recetas/<%= receta._id %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-delete">Borrar Receta</button>
+                    </form>
+                    <a href="/recetas/<%= receta._id %>/editar" class="btn btn-edit">Modificar Receta</a>
+                    <a href="/api/v1/recetas/<%= receta._id %>/reviews" class="btn btn-reviews">Reviews</a> <!-- Nuevo botón Reviews -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

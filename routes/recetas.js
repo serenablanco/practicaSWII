@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
     if (next) {
         try {
-            query = { _id: { $lt: new ObjectId(next) } };
+            query = { _id: { _id: parseInt(next) } };
         } catch (err) {
             return res.status(400).send('Error: ID de paginación inválido');
         }
@@ -37,7 +37,8 @@ router.get('/', async (req, res) => {
             .toArray();
 
         next = recetas.length === limit ? recetas[recetas.length - 1]._id : null;
-        res.status(200).json({ results: recetas, next });
+        // Renderizar la plantilla EJS con los resultados de la consulta
+        res.render('recetas', { recetas: recetas, next: next });
     } catch (err) {
         res.status(400).send('Error al buscar recetas');
     }
@@ -75,24 +76,20 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const id = req.params.id; // Obtener el ID de la receta de los parámetros de la URL
     const db = dbo.getDb();
+    let query = {_id: parseInt(id)};
     try {
         let receta = await db
             .collection('recetas')
-            .findOne({ _id: parseInt(id) }); // Buscar la receta por el ID
+            .findOne(query); // Buscar la receta por el ID
 
         if (!receta) {
             return res.status(404).send('Receta no encontrada');
+        } else {
+            //res.status(200).json(receta);
+            res.render('recetaPorID', {receta: receta});
         }
 
-        if (req.accepts('json')) {
-            res.status(200).json(receta);
-        } else if (req.accepts('xml')) {
-            const xmlData = xmljs.j2xml({receta}, {compact: true});
-            res.set('Content-type', 'application/xml');
-            res.status(200).send(xmlData);
-        } else {
-            res.status(406).send('Formato no aceptado');
-        }
+        //res.render('recetaPorID', {receta: receta});
 
     } catch (err) {
         res.status(400).send('Error al buscar la receta');
@@ -163,7 +160,8 @@ router.get('/:id/reviews', async (req, res) => {
             return res.status(404).send('No se encontraron reseñas para esta receta');
         }
 
-        res.status(200).json(reviews);
+        res.render('reviews', { reviews: reviews, message: null });
+        //res.status(200).json(reviews);
     } catch (err) {
         res.status(400).send('Error al buscar las reseñas');
     }
@@ -203,6 +201,7 @@ async function obtenerInformacionIngrediente(id) {
     }
 }
 
+/*
 // Ruta para obtener los ingredientes y su información nutricional de una receta
 router.get('/:id/ingredientes', async (req, res) => {
     const recetaId = req.params.id;
@@ -244,6 +243,6 @@ router.get('/:id/ingredientes', async (req, res) => {
         console.error(`Error al buscar la receta ${recetaId}: ${error.message}`);
         res.status(500).send('Error interno del servidor');
     }
-});
+});*/
 
 module.exports = router;

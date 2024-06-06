@@ -1,11 +1,53 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API de Recetas - Inicio</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 2px solid #509bf5;
+            border-radius: 10px;
+            background-color: #fff;
+            color: #509bf5;
+            font-size: 1.6rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-align: center; /* Añadido para centrar el texto */
+            width: 200px; /* Ancho fijo para los botones */
+            white-space: nowrap; /* Evitar el corte del texto */
+        }
+
+        .btn:hover {
+            background-color: #509bf5;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Bienvenido a la API de Recetas!</h1>
+        <div class="button-container">
+            <a href="/api/v1/recetas" class="btn">Recetas</a>
+            <a href="/api/v1/categorias" class="btn">Categorías</a>
+            <a href="/api/v1/usuarios" class="btn">Usuarios</a>
+        </div>
+    </div>
+</body>
 </html>

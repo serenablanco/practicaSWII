@@ -13,6 +13,7 @@ const indexRouter = require('./routes/index');
 const recetasRouter = require('./routes/recetas');
 const usuariosRouter = require('./routes/usuarios');
 const categoriasRouter = require('./routes/categorias');
+const loginRouter = require('./routes/login');
 
 let app = express();
 
@@ -31,7 +32,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
-app.use('/', indexRouter);
+app.use('/', loginRouter);
+app.use(process.env.BASE_URI + '/index', indexRouter);
 app.use(process.env.BASE_URI + '/recetas', recetasRouter);
 app.use(process.env.BASE_URI + '/usuarios', usuariosRouter);
 app.use(process.env.BASE_URI + '/categorias', categoriasRouter);

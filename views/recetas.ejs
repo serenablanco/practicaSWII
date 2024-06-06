@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetas</title>
+    <link rel="stylesheet" href="/public/stylesheets/style.css">
+    <style>
+        .container {
+            margin: 20px;
+        }
+
+        .recipe-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .recipe-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .recipe-item h2, .recipe-item p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        .recipe-item a {
+            display: block;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .recipe-item a:hover {
+            background-color: #0056b3;
+        }
+
+        .add-recipe-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .add-recipe-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recetas</h1>
+        <div class="recipe-list">
+            <% if (recetas.length > 0) { %>
+                <% recetas.forEach(receta => { %>
+                    <div class="recipe-item">
+                        <h2>Receta: <%= receta.Name %></h2>
+                        <p>Usuario: <%= receta.user %></p>
+                        <a href="/api/v1/recetas/<%= receta._id %>">Ver Receta</a>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p class="no-recetas"><%= message || 'No se encontraron recetas.' %></p>
+            <% } %>
+        </div>
+        <a href="/api/v1/recetas" class="add-recipe-btn">Añadir Nueva Receta</a>
+    </div>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>
+
