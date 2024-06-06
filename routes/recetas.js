@@ -3,6 +3,11 @@ const router = express.Router();
 const { ObjectId } = require('mongodb');
 const dbo = require('../db/conn');
 const MAX_RESULTS = parseInt(process.env.MAX_RESULTS);
+const fs = require('fs');
+const xmlSchemaPath = './xml_schema/recetas_schema.xml';
+const xmlSchema = fs.readFileSync(xmlSchemaPath, 'utf-8');
+const axios = require('axios');
+
 
 // Obtener todas las recetas
 router.get('/', async (req, res) => {
@@ -52,7 +57,7 @@ router.post('/', async (req, res) => {
 
     do {
         numeroUnico = generarNumeroUnico();
-        recetaExistente = await db.collection('recetas').findOne({ _id: numeroUnico });
+        recetaExistente = await db.collection('recetas').findOne({ id: numeroUnico });
     } while (recetaExistente);
 
     let result = await db
@@ -79,7 +84,16 @@ router.get('/:id', async (req, res) => {
             return res.status(404).send('Receta no encontrada');
         }
 
-        res.status(200).json(receta);
+        if (req.accepts('json')) {
+            res.status(200).json(receta);
+        } else if (req.accepts('xml')) {
+            const xmlData = xmljs.j2xml({receta}, {compact: true});
+            res.set('Content-type', 'application/xml');
+            res.status(200).send(xmlData);
+        } else {
+            res.status(406).send('Formato no aceptado');
+        }
+
     } catch (err) {
         res.status(400).send('Error al buscar la receta');
     }
@@ -154,6 +168,82 @@ router.get('/:id/reviews', async (req, res) => {
         res.status(400).send('Error al buscar las reseñas');
     }
 });
-  
+
+// Crear una nueva reseña
+router.post('/:id/reviews', async (req, res) => {
+    try {
+        const id = req.params.id; // Obtener el ID de la receta de los parámetros de la URL
+        let numeroUnico;
+        let recetaExistente;
+
+        do {
+            numeroUnico = generarNumeroUnico();
+            recetaExistente = await db.collection('reviews').findOne({ id: numeroUnico });
+        } while (recetaExistente);
+        const db = dbo.getDb();
+        let result = await db
+            .collection('reviews')
+            .insertOne({ ...req.body, recipe_id: parseInt(id), _id: numeroUnico });
+        
+        const jsonResponse = { id: numeroUnico, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${numeroUnico}` };
+        res.status(201).json(jsonResponse);
+    } catch (err) {
+        res.status(400).send('Error al crear la reseña');
+    }
+});
+
+// Función para obtener información adicional de un ingrediente desde Spoonacular
+async function obtenerInformacionIngrediente(id) {
+    try {
+        const response = await axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=81d641e5be674e4cbe0c2e74c5d66780`);
+        return response.data; // Retorna la información adicional del ingrediente desde Spoonacular
+    } catch (error) {
+        console.error(`Error al obtener información del ingrediente con ID ${id} desde Spoonacular: ${error.message}`);
+        throw new Error(`Error al obtener información del ingrediente con ID ${id} desde Spoonacular`);
+    }
+}
+
+// Ruta para obtener los ingredientes y su información nutricional de una receta
+router.get('/:id/ingredientes', async (req, res) => {
+    const recetaId = req.params.id;
+
+    // Obtener la receta correspondiente desde MongoDB
+    const db = dbo.getDb();
+    try {
+        const receta = await db.collection('recetas').findOne({ _id: parseInt(recetaId) });
+
+        if (!receta) {
+            return res.status(404).send('Receta no encontrada');
+        }
+
+        // Obtener la lista de ingredientes desde el campo 'Ingredients' de la receta
+        const ingredientesArray = receta.Ingredients.split(', '); // Dividir la cadena en un array de ingredientes
+
+        // Realizar una consulta a Spoonacular para obtener información nutricional sobre cada ingrediente
+        const promesas = ingredientesArray.map(async ingrediente => {
+            try {
+                // Realizar una búsqueda en Spoonacular para obtener el ID del ingrediente
+                const responseBusqueda = await axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ingrediente}&apiKey=81d641e5be674e4cbe0c2e74c5d66780`);
+                const idIngrediente = responseBusqueda.data.results[0].id;
+
+                // Utilizar el ID del ingrediente para obtener información adicional desde Spoonacular
+                const infoIngrediente = await obtenerInformacionIngrediente(idIngrediente);
+
+                return { ingrediente, infoIngrediente };
+            } catch (error) {
+                console.error(`Error al procesar el ingrediente ${ingrediente}: ${error.message}`);
+                return { ingrediente, error: 'No se pudo obtener información adicional' };
+            }
+        });
+
+        // Esperar a que todas las consultas a Spoonacular se completen
+        const resultados = await Promise.all(promesas);
+
+        res.status(200).json(resultados);
+    } catch (error) {
+        console.error(`Error al buscar la receta ${recetaId}: ${error.message}`);
+        res.status(500).send('Error interno del servidor');
+    }
+});
 
 module.exports = router;

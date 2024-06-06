@@ -11,6 +11,7 @@ const RECETA = {
   "Instructions": "Pela las patatas y córtalas en rodajas. Fríe las patatas en aceite. Después saca las patatas de la sarten y mézclalas con los huevos. Fríe todo junto."
 };
 
+
 describe('GET /recetas', () => {
   it('Se reciben las recetas', async () => {
     const res = await axios.get(BASE_URL + '/recetas');
@@ -62,5 +63,26 @@ describe('DELETE /recetas/:id', () => {
     const id = 39;
     const res = await axios.delete(BASE_URL + '/recetas/' + id);
     expect(res.status).toEqual(200);
+  });
+});*/
+/*
+describe('POST /recetas/:id/reviews', () => {
+  it('Debe crear una nueva reseña', async () => {
+    // Preparar datos para la nueva reseña
+    const reviewData = {
+      "user_id": 1567,
+      "user": "elly9812",
+      "rating": 5,
+      "comment": "Me encanta esta receta"
+    };
+    
+    // ID de la receta a la que se le está haciendo la reseña
+    const recetaId = 42;
+
+    // Enviar la solicitud para crear la nueva reseña
+    const res = await axios.post(BASE_URL + `/recetas/${recetaId}/reviews`, reviewData);
+
+    // Verificar que la respuesta tenga el estado 201 (creado exitosamente)
+    expect(res.status).toEqual(201);
   });
 });*/
