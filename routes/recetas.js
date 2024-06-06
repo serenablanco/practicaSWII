@@ -38,14 +38,29 @@ router.get('/', async (req, res) => {
     }
 });
 
+function generarNumeroUnico() {
+    return Math.floor(100000 + Math.random() * 900000);
+}
+
 // Crear una nueva receta
 router.post('/', async (req, res) => {
   try {
     const db = dbo.getDb();
+
+    let numeroUnico;
+    let recetaExistente;
+
+    do {
+        numeroUnico = generarNumeroUnico();
+        recetaExistente = await db.collection('recetas').findOne({ id: numeroUnico });
+    } while (recetaExistente);
+
     let result = await db
         .collection('recetas')
-        .insertOne(req.body);
-    res.status(201).json({ id: result.insertedId, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${result.insertedId}` });
+        .insertOne({ ...req.body, _id: numeroUnico });
+    const jsonResponse= { id: numeroUnico, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${result.insertedId}` };
+    console.log('Respuesta enviada al cliente:', jsonResponse);
+    res.status(201).json(jsonResponse)
   } catch (error) {
     res.status(400).json({ error: 'Los parámetros proporcionados son incorrectos' });
   }
