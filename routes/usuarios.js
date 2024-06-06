@@ -100,27 +100,5 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// Definir ruta para crear usuarios
-router.post('/', async (req, res) => {
-    // Parsea los datos de la solicitud
-    const { AuthorName } = req.body;
-
-    // Valida los campos obligatorios
-    if (!AuthorName) {
-        return res.status(400).json({ error: 'El campo AuthorName es obligatorio' });
-    }
-
-    const db = dbo.getDb();
-    try {
-        // Inserta el nuevo usuario en la base de datos
-        const result = await db.collection('usuarios').insertOne({AuthorName});
-        
-        // Retorna el ID del nuevo usuario
-        res.status(201).json({ _id: result.insertedId, AuthorName: nuevoUsuario.AuthorName });
-    } catch (error) {
-        res.status(500).json({ error: 'Error al crear usuario' });
-    }
-});
-  
 
 module.exports = router;
