@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 
     do {
         numeroUnico = generarNumeroUnico();
-        recetaExistente = await db.collection('recetas').findOne({ id: numeroUnico });
+        recetaExistente = await db.collection('recetas').findOne({ _id: numeroUnico });
     } while (recetaExistente);
 
     let result = await db

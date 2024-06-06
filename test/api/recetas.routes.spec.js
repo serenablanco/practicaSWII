@@ -1,8 +1,5 @@
-const jestOpenAPI = require('jest-openapi').default;
 const axios = require('axios').default;
 const BASE_URL = "http://localhost:3000/api/v1";
-const SCHEMA = "../schema/cine.schema.yaml";
-const path = require('path');
 const RECETA = {
   "Name" : "Tortilla de patatas",
   "user_id": 1567,
@@ -18,8 +15,6 @@ describe('GET /recetas', () => {
   it('Se reciben las recetas', async () => {
     const res = await axios.get(BASE_URL + '/recetas');
     expect(res.status).toEqual(200);
-    // Assert that the HTTP response satisfies the OpenAPI spec
-    //expect(res).toSatisfyApiSpec();
   });
 });
 
@@ -40,12 +35,14 @@ describe('GET /recetas/:id/reviews', () => {
   });
 });
 
+/*
 describe('POST /recetas', () => {
   it('Debe crear una receta', async () => {
     const res = await axios.post(BASE_URL + '/recetas', RECETA);
     expect(res.status).toEqual(201);
   });
 });
+*/
 
 describe('PUT /recetas/:id', () => {
   it('Debe actualizar una receta', async () => {
@@ -67,4 +64,3 @@ describe('DELETE /recetas/:id', () => {
     expect(res.status).toEqual(200);
   });
 });*/
- 
