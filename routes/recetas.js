@@ -193,7 +193,7 @@ router.post('/:id/reviews', async (req, res) => {
 // Función para obtener información adicional de un ingrediente desde Spoonacular
 async function obtenerInformacionIngrediente(id) {
     try {
-        const response = await axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=81d641e5be674e4cbe0c2e74c5d66780`);
+        const response = await axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?amount=1&apiKey=81d641e5be674e4cbe0c2e74c5d66780`);
         return response.data; // Retorna la información adicional del ingrediente desde Spoonacular
     } catch (error) {
         console.error(`Error al obtener información del ingrediente con ID ${id} desde Spoonacular: ${error.message}`);
@@ -201,7 +201,7 @@ async function obtenerInformacionIngrediente(id) {
     }
 }
 
-/*
+
 // Ruta para obtener los ingredientes y su información nutricional de una receta
 router.get('/:id/ingredientes', async (req, res) => {
     const recetaId = req.params.id;
@@ -222,7 +222,7 @@ router.get('/:id/ingredientes', async (req, res) => {
         const promesas = ingredientesArray.map(async ingrediente => {
             try {
                 // Realizar una búsqueda en Spoonacular para obtener el ID del ingrediente
-                const responseBusqueda = await axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ingrediente}&apiKey=81d641e5be674e4cbe0c2e74c5d66780`);
+                const responseBusqueda = await axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ingrediente}&number=1&apiKey=81d641e5be674e4cbe0c2e74c5d66780`);
                 const idIngrediente = responseBusqueda.data.results[0].id;
 
                 // Utilizar el ID del ingrediente para obtener información adicional desde Spoonacular
@@ -243,6 +243,6 @@ router.get('/:id/ingredientes', async (req, res) => {
         console.error(`Error al buscar la receta ${recetaId}: ${error.message}`);
         res.status(500).send('Error interno del servidor');
     }
-});*/
+});
 
 module.exports = router;
