@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { ObjectId } = require('mongodb');
 const dbo = require('../db/conn');
-const MAX_RESULTS = 20;
+const MAX_RESULTS = parseInt(process.env.MAX_RESULTS);
 
 // Obtener todos los usuarios
 router.get('/', async (req, res) => {

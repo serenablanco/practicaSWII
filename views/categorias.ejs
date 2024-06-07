@@ -23,10 +23,12 @@
             text-align: center;
             color: #333;
         }
-        ul {
+        .category-list {
             list-style-type: none;
             padding: 0;
             margin: 0;
+            max-height: 400px; /* Altura máxima del contenedor */
+            overflow-y: auto; /* Habilitar desplazamiento vertical */
         }
         li {
             margin-bottom: 10px;
@@ -48,7 +50,7 @@
 <body>
     <div class="container">
         <h1>Categorías</h1>
-        <ul>
+        <ul class="category-list">
             <% categorias.forEach(categoria => { %>
                 <li>
                     <a href="/api/v1/categorias/<%= categoria.category %>/recetas"><%= categoria.category %></a>

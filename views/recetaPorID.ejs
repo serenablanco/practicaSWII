@@ -96,15 +96,11 @@
             <!-- Agrega más campos según sea necesario -->
             <div class="buttons">
                 <div class="btn-container">
-                    <form action="/recetas/<%= receta._id %>?_method=DELETE" method="POST">
-                        <button type="submit" class="btn btn-delete">Borrar Receta</button>
-                    </form>
-                    <a href="/recetas/<%= receta._id %>/editar" class="btn btn-edit">Modificar Receta</a>
                     <a href="/api/v1/recetas/<%= receta._id %>/reviews" class="btn btn-reviews">Reviews</a> <!-- Nuevo botón Reviews -->
                 </div>
             </div>
         </div>
     </div>
-    <script src="/js/scripts.js"></script>
+
 </body>
 </html>

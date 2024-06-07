@@ -14,7 +14,7 @@
         }
 
         .recipe-list {
-            max-height: 800px;
+            max-height: 400px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -171,6 +171,14 @@
                 <button type="submit">Crear Receta</button>
             </form>
         </div>
+    </div>
+    <div class="container">
+        <h2>Eliminar Receta</h2>
+        <form id="delete-form" action="/api/v1/recetas/:id" method="DELETE">
+            <label for="recipe_id">ID de la Receta a Eliminar:</label>
+            <input type="text" id="recipe_id" name="_id" required>
+            <button type="submit">Eliminar Receta</button>
+        </form>
     </div>
 
 </body>
