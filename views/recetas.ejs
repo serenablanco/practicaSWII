@@ -6,11 +6,16 @@
     <title>Recetas</title>
     <link rel="stylesheet" href="/public/stylesheets/style.css">
     <style>
+        /* Estilos adicionales si es necesario */
         .container {
-            margin: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            padding-bottom: 60px;
         }
 
         .recipe-list {
+            max-height: 800px;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -29,8 +34,8 @@
         }
 
         .recipe-item a {
-            display: block;
-            padding: 10px;
+            display: inline-block;
+            padding: 8px 16px;
             background-color: #007bff;
             color: white;
             text-align: center;
@@ -44,18 +49,56 @@
         }
 
         .add-recipe-btn {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
             background-color: #28a745;
             color: white;
             text-align: center;
             text-decoration: none;
             border-radius: 5px;
+            z-index: 1000;
         }
 
         .add-recipe-btn:hover {
             background-color: #218838;
+        }
+
+        /* Estilos para el formulario */
+        .recipe-form {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .recipe-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .recipe-form input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .recipe-form button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .recipe-form button[type="submit"]:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -75,9 +118,60 @@
                 <p class="no-recetas"><%= message || 'No se encontraron recetas.' %></p>
             <% } %>
         </div>
-        <a href="/api/v1/recetas" class="add-recipe-btn">Añadir Nueva Receta</a>
     </div>
-    <script src="/js/scripts.js"></script>
+
+    <!-- Contenedor del formulario para crear una nueva receta -->
+    <div class="container">
+        <div class="recipe-form">
+            <h2>Nueva Receta</h2>
+            <form action="/api/v1/recetas" method="POST">
+                <label for="recipe_name">Nombre de la Receta:</label>
+                <input type="text" id="recipe_name" name="Name" required>
+
+                <label for="user_id">ID Usuario:</label>
+                <input type="integer" id="user_id" name="user_id" required>
+    
+                <label for="user_name">Usuario:</label>
+                <input type="text" id="user_name" name="user" required>
+    
+                <label for="time">Tiempo:</label>
+                <input type="text" id="time" name="Time" required>
+    
+                <label for="category">Categoría:</label>
+                <select id="category" name="Category" required>
+                    <option value="">Seleccione una categoría</option>
+                    <option value="Dessert">Dessert</option>
+                    <option value="Lunch/Snacks">Lunch/Snacks</option>
+                    <option value="Vegetable">Vegetable</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Breads">Breads</option>
+                    <option value="Pie">Pie</option>
+                    <option value="Sauces/Spreads">Sauces/Spreads</option>
+                    <option value="Fruit">Fruit</option>
+                    <option value="European">European</option>
+                    <option value="Healthy">Healthy</option>
+                    <option value="Low Protein">Low Protein</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Fish">Fish</option>
+                    <option value="Soup">Soup</option>
+                    <option value="Asian">Asian</option>
+                </select>
+    
+                <label for="ingredients">Ingredientes:</label>
+                <input type="text" id="Ingredients" name="Ingredients" required>
+    
+                <label for="rating">Rating:</label>
+                <input type="text" id="Rating" name="Rating" required>
+    
+                <label for="instructions">Instrucciones:</label>
+                <input type="text" id="Instructions" name="Instructions" required>
+    
+                <button type="submit">Crear Receta</button>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>
-
