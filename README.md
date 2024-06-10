@@ -12,6 +12,17 @@ API para compartir una gran variedad de recetas de comida.
  - MongoDB
  - Spoonacular
 
+## PREPARACIÓN DEL ENTORNO
+### 1. Clonar este repositorio
+ - git clone https://github.com/serenablanco/practicaSWII.git
+
+### 2. Instalar todas las dependencias
+ - npm install
+
+### 3. Cargar los datos a una base de datos MongoDB
+ - cd /setup
+ - ./setup.sh
+
 ## RUTAS 
 ### RECETAS
  - GET /api/v1/recetas
