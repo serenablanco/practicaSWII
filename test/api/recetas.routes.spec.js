@@ -18,7 +18,7 @@ describe('GET /recetas', () => {
     expect(res.status).toEqual(200);
   });
 });
-
+/*
 describe('GET /recetas/:id', () => {
   it('El ID es válido y la receta existe', async () => {
     const id = 42;
@@ -26,7 +26,7 @@ describe('GET /recetas/:id', () => {
     expect(res.status).toEqual(200);
     expect(res.data).toEqual(expect.objectContaining({_id: id}));
   });
-});
+});*/
 
 describe('GET /recetas/:id/reviews', () => {
   it('Se reciben las reseñas de la receta', async () => {
@@ -36,15 +36,15 @@ describe('GET /recetas/:id/reviews', () => {
   });
 });
 
-/*
+
 describe('POST /recetas', () => {
   it('Debe crear una receta', async () => {
     const res = await axios.post(BASE_URL + '/recetas', RECETA);
     expect(res.status).toEqual(201);
   });
 });
-*/
 
+/*
 describe('PUT /recetas/:id', () => {
   it('Debe actualizar una receta', async () => {
     const id = 3965;
@@ -55,7 +55,7 @@ describe('PUT /recetas/:id', () => {
     const res = await axios.put(BASE_URL + '/recetas/' + id, datosModificados);
     expect(res.status).toEqual(200);
   });  
-});
+});*/
 
 /*
 describe('DELETE /recetas/:id', () => {

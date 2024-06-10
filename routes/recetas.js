@@ -38,7 +38,8 @@ router.get('/', async (req, res) => {
 
         next = recetas.length === limit ? recetas[recetas.length - 1]._id : null;
         // Renderizar la plantilla EJS con los resultados de la consulta
-        res.render('recetas', { recetas: recetas, next: next });
+        //res.render('recetas', { recetas: recetas, next: next });
+        res.status(200).json(recetas);
     } catch (err) {
         res.status(400).send('Error al buscar recetas');
     }
@@ -50,27 +51,28 @@ function generarNumeroUnico() {
 
 // Crear una nueva receta
 router.post('/', async (req, res) => {
-  try {
-    const db = dbo.getDb();
-
-    let numeroUnico;
-    let recetaExistente;
-
-    do {
-        numeroUnico = generarNumeroUnico();
-        recetaExistente = await db.collection('recetas').findOne({ id: numeroUnico });
-    } while (recetaExistente);
-
-    let result = await db
-        .collection('recetas')
-        .insertOne({ ...req.body, _id: numeroUnico });
-    const jsonResponse= { id: numeroUnico, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${result.insertedId}` };
-    console.log('Respuesta enviada al cliente:', jsonResponse);
-    res.status(201).json(jsonResponse)
-  } catch (error) {
-    res.status(400).json({ error: 'Los parámetros proporcionados son incorrectos' });
-  }
+    try {
+        const db = dbo.getDb();
+    
+        let numeroUnico;
+        let recetaExistente;
+    
+        do {
+            numeroUnico = generarNumeroUnico();
+            recetaExistente = await db.collection('recetas').findOne({ id: numeroUnico });
+        } while (recetaExistente);
+    
+        let result = await db
+            .collection('recetas')
+            .insertOne({ ...req.body, _id: numeroUnico });
+        const jsonResponse= { id: numeroUnico, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${result.insertedId}` };
+        console.log('Respuesta enviada al cliente:', jsonResponse);
+        res.status(201).json(jsonResponse)
+    } catch (error) {
+        res.status(400).json({ error: 'Los parámetros proporcionados son incorrectos' });
+    }
 });
+
 
 // Obtener una receta específica
 router.get('/:id', async (req, res) => {
@@ -85,11 +87,9 @@ router.get('/:id', async (req, res) => {
         if (!receta) {
             return res.status(404).send('Receta no encontrada');
         } else {
-            //res.status(200).json(receta);
-            res.render('recetaPorID', {receta: receta});
+            res.status(200).json(receta);
+            //res.render('recetaPorID', {receta: receta});
         }
-
-        //res.render('recetaPorID', {receta: receta});
 
     } catch (err) {
         res.status(400).send('Error al buscar la receta');
@@ -160,8 +160,8 @@ router.get('/:id/reviews', async (req, res) => {
             return res.status(404).send('No se encontraron reseñas para esta receta');
         }
 
-        res.render('reviews', { reviews: reviews, message: null });
-        //res.status(200).json(reviews);
+        //res.render('reviews', { reviews: reviews, message: null });
+        res.status(200).json(reviews);
     } catch (err) {
         res.status(400).send('Error al buscar las reseñas');
     }
@@ -171,6 +171,7 @@ router.get('/:id/reviews', async (req, res) => {
 router.post('/:id/reviews', async (req, res) => {
     try {
         const id = req.params.id; // Obtener el ID de la receta de los parámetros de la URL
+        const db = dbo.getDb();
         let numeroUnico;
         let recetaExistente;
 
@@ -178,13 +179,13 @@ router.post('/:id/reviews', async (req, res) => {
             numeroUnico = generarNumeroUnico();
             recetaExistente = await db.collection('reviews').findOne({ id: numeroUnico });
         } while (recetaExistente);
-        const db = dbo.getDb();
+        
         let result = await db
             .collection('reviews')
             .insertOne({ ...req.body, recipe_id: parseInt(id), _id: numeroUnico });
         
-        const jsonResponse = { id: numeroUnico, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${numeroUnico}` };
-        res.status(201).json(jsonResponse);
+        //const jsonResponse = { id: numeroUnico, url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${numeroUnico}` };
+        res.status(201).json(result);
     } catch (err) {
         res.status(400).send('Error al crear la reseña');
     }

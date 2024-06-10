@@ -138,25 +138,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/categorias'
-  /categorias/{id}:
-    parameters:
-      - $ref: '#/components/parameters/id'
-    get:
-      summary: Obtener información de una categoría específica
-      description: Obtener información de una categoría específica
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/categoria'
-        "404":
-          description: No existe la categoría con ese ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorMessage'
   /categorias/{id}/recetas:
     parameters:
       - $ref: '#/components/parameters/id'
@@ -196,6 +177,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorMessage'
+  /categorias/{id}/recetas/{recetaId}/reviews:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      summary: Obtener todas las reseñas de una receta de una categoría específica
+      description: Obtener todas las reseñas de una receta de una categoría específica
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reviews'
   /usuarios:
     get:
       summary: Ver todos los usuarios
@@ -207,25 +201,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/usuarios'
-  /usuarios/{id}:
-    parameters:
-      - $ref: '#/components/parameters/id'
-    get:
-      summary: Obtener información de un usuario específico
-      description: Obtener información de un usuario específico
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/usuario'
-        "404":
-          description: No existe el usuario con ese ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorMessage'
   /usuarios/{id}/recetas:
     parameters:
       - $ref: '#/components/parameters/id'
@@ -239,6 +214,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/recetas'
+  /usuarios/{id}/recetas/{idReceta}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - name: idReceta
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+          example: 39
+    get:
+      summary: Obtener una receta 
+      description: Obtener una receta creada por un usuario específico
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receta'
+        "404":
+          description: No existe la receta o el usuario con ese ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+  /usuarios/{id}/recetas/{recetaId}/reviews:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      summary: Obtener todas las reseñas de una receta de un usuario específico
+      description: Obtener todas las reseñas de una receta de un usuario específico
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reviews'
 components:
   parameters:
     id:

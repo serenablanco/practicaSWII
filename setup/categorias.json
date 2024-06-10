@@ -1,0 +1,74 @@
+[
+  {
+    "_id": 1,
+    "category": "Dessert"
+  },
+  {
+    "_id": 2,
+    "category": "Lunch/Snacks"
+  },
+  {
+    "_id": 3,
+    "category": "Vegetable"
+  },
+  {
+    "_id": 4,
+    "category": "Chicken"
+  },
+  {
+    "_id": 5,
+    "category": "Beverages"
+  },
+  {
+    "_id": 6,
+    "category": "Meat"
+  },
+  {
+    "_id": 7,
+    "category": "Easy"
+  },
+  {
+    "_id": 8,
+    "category": "Breads"
+  },
+  {
+    "_id": 9,
+    "category": "Pie"
+  },
+  {
+    "_id": 10,
+    "category": "Sauces/Spreads"
+  },
+  {
+    "_id": 11,
+    "category": "Fruit"
+  },
+  {
+    "_id": 12,
+    "category": "European"
+  },
+  {
+    "_id": 13,
+    "category": "Healthy"
+  },
+  {
+    "_id": 14,
+    "category": "Low Protein"
+  },
+  {
+    "_id": 15,
+    "category": "Breakfast"
+  },
+  {
+    "_id": 16,
+    "category": "Fish"
+  },
+  {
+    "_id": 17,
+    "category": "Soup"
+  },
+  {
+    "_id": 18,
+    "category": "Asian"
+  }
+]

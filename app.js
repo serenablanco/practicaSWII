@@ -14,6 +14,7 @@ const recetasRouter = require('./routes/recetas');
 const usuariosRouter = require('./routes/usuarios');
 const categoriasRouter = require('./routes/categorias');
 const loginRouter = require('./routes/login');
+const bodyParser = require('body-parser');
 
 let app = express();
 

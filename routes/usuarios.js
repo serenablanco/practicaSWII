@@ -30,8 +30,8 @@ router.get('/', async (req, res) => {
             .limit(limit)
             .toArray();
         
-        res.render('usuarios', {usuarios: usuarios})
-        //res.status(200).json({ results: usuarios, next });
+        //res.render('usuarios', {usuarios: usuarios})
+        res.status(200).json({ results: usuarios, next });
     } catch (err) {
         res.status(400).send('Error al buscar usuarios');
     }
@@ -57,8 +57,8 @@ router.get('/:id/recetas', async (req, res) => {
             return res.status(404).send('No se encontraron recetas para este usuario');
         }
 
-        res.render('recetasPorUsuario', { recetas: recetas, usuarioId: id });
-        //res.status(200).json(recetas);
+        //res.render('recetasPorUsuario', { recetas: recetas, usuarioId: id });
+        res.status(200).json(recetas);
     } catch (err) {
         res.status(400).send('Error al buscar las recetas');
     }
@@ -82,6 +82,32 @@ router.get('/:usuarioId/recetas/:recetaId', async (req, res) => {
         res.status(200).json(receta);
     } catch (err) {
         res.status(400).send('Error al buscar la receta');
+    }
+});
+
+// Obtener las reseñas de una receta específica a partir del usuario
+router.get('/:usuarioId/recetas/:recetaId/reviews', async (req, res) => {
+    const usuarioId = parseInt(req.params.usuarioId);
+    const recetaId = req.params.recetaId; // Obtener el ID de la receta de los parámetros de la URL
+
+    const db = dbo.getDb();
+    try {
+        let receta = await db
+            .collection('recetas')
+            .findOne({ user_id: usuarioId, _id: parseInt(recetaId) }); // Buscar la receta por el ID de la categoría y el ID de la receta
+
+        if (!receta) {
+            return res.status(404).send('No se encontró la reseña');
+        }
+
+        let reseñas = await db
+            .collection('reviews')
+            .find({ recipe_id: parseInt(recetaId) })
+            .toArray();
+
+        res.status(200).json(reseñas);
+    } catch (err) {
+        res.status(400).send('Error al buscar las reseñas para la receta');
     }
 });
 
